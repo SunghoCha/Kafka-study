@@ -5,11 +5,14 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
-import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 
-public class SimpleProducer {
+public class SimpleProducerSync {
+    public static final Logger logger = LoggerFactory.getLogger(SimpleProducerSync.class);
     public static void main(String[] args) {
         String topicName = "simple-topic";
 
@@ -25,13 +28,22 @@ public class SimpleProducer {
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
         // ProducerRecord 객체 생성
-        ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topicName, "hello world3");
+        ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topicName, "hello world4");
 
         // KafkaProducer 메시지 send
-        producer.send(producerRecord);
-
-        producer.flush();
-        producer.close();
+        try {
+            RecordMetadata recordMetadata = producer.send(producerRecord).get();
+            logger.info("\n ##### record metadata received ##### \n" +
+                    "partition:"  + recordMetadata.partition() + "\n" +
+                    "offset:"  + recordMetadata.offset() + "\n" +
+                    "timestamp:"  + recordMetadata.timestamp() + "\n");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            producer.close();
+        }
 
     }
 }
