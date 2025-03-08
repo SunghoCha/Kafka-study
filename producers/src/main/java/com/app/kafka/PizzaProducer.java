@@ -15,6 +15,20 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class PizzaProducer {
+    public static void main(String[] args) {
+        String topicName = "pizza-topic";
+
+        Properties props = new Properties();
+        props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
+        props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
+        KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(props);
+        sendPizzaMessage(kafkaProducer, topicName, -1, 500, 0, 0, true);
+        kafkaProducer.close();
+
+    }
+
     public static final Logger logger = LoggerFactory.getLogger(PizzaProducer.class);
 
     public static void sendPizzaMessage(KafkaProducer<String, String> kafkaProducer,
@@ -86,18 +100,4 @@ public class PizzaProducer {
         }
     }
 
-
-    public static void main(String[] args) {
-        String topicName = "pizza-topic";
-
-        Properties props = new Properties();
-        props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
-        props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-
-        KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(props);
-        sendPizzaMessage(kafkaProducer, topicName, -1, 1000, 0, 0, false);
-        kafkaProducer.close();
-
-    }
 }

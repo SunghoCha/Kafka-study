@@ -18,7 +18,8 @@ public class PizzaProducerCustomPartitioner {
     public static final Logger logger = LoggerFactory.getLogger(PizzaProducerCustomPartitioner.class);
 
     public static void main(String[] args) {
-        String topicName = "pizza-topic-partitioner";
+       // String topicName = "pizza-topic-partitioner";
+        String topicName = "pizza-topic";
 
         Properties props = new Properties();
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
