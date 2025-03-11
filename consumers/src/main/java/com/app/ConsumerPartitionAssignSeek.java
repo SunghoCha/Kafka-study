@@ -24,7 +24,7 @@ public class ConsumerPartitionAssignSeek {
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_pizza_assign_seek");
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_pizza_assign_seek_v001");
         //props.setProperty(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "6000");
         props.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 
@@ -32,6 +32,7 @@ public class ConsumerPartitionAssignSeek {
         TopicPartition topicPartition = new TopicPartition(topicName, 0);
         //kafkaConsumer.subscribe(List.of(topicName));
         kafkaConsumer.assign(Arrays.asList(topicPartition));
+        kafkaConsumer.seek(topicPartition, 10L);
 
         //main thread
         Thread mainThread = Thread.currentThread();
