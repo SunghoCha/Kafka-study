@@ -51,7 +51,7 @@ public class FileProducer {
                 String key = tokens[0].trim();
 
                 StringJoiner valueJoiner = new StringJoiner(delimiter);
-                IntStream.range(0, tokens.length).forEach(i -> valueJoiner.add(tokens[i].trim()));
+                IntStream.range(1, tokens.length).forEach(i -> valueJoiner.add(tokens[i].trim()));
                 String value = valueJoiner.toString();
 
                 sendMessage(kafkaProducer, topicName, key, value);

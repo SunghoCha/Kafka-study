@@ -1,11 +1,14 @@
 package com.practice.kafka.event;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 public class FileEventHandler implements EventHandler {
@@ -41,6 +44,22 @@ public class FileEventHandler implements EventHandler {
         } else {
             logger.error("exception error from broker " + exception.getMessage());
         }
+    }
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        String topicName = "file-topic";
+
+        Properties props = new Properties();
+        props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
+        props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
+        KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(props);
+        boolean sync = true;
+
+        FileEventHandler eventHandler = new FileEventHandler(kafkaProducer, topicName, sync);
+        MessageEvent messageEvent = new MessageEvent("key00001", "this is test message");
+        eventHandler.onMessage(messageEvent);
     }
 
 }
