@@ -58,7 +58,7 @@ public class FileUtilAppend {
     public void writeMessage(String filePath, Faker faker, Random random) {
         try {
             File file = new File(filePath);
-            if(!file.exists()) {
+            if (!file.exists()) {
                 file.createNewFile();
             }
 
@@ -66,13 +66,13 @@ public class FileUtilAppend {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             PrintWriter printWriter = new PrintWriter(bufferedWriter);
 
-            for(int i=0; i < 50; i++) {
+            for (int i = 0; i < 50; i++) {
                 HashMap<String, String> message = produce_msg(faker, random, orderSeq++);
                 printWriter.println(message.get("key")+"," + message.get("message"));
             }
             printWriter.close();
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -86,14 +86,14 @@ public class FileUtilAppend {
 
         String filePath = "F:\\git\\KafkaProj-01\\practice\\src\\main\\resources\\pizza_append.txt";
         // 100회 반복 수행.
-        for(int i=0; i<1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             //50 라인의 주문 문자열을 출력
             fileUtilAppend.writeMessage(filePath, faker, random);
             System.out.println("###### iteration:"+i+" file write is done");
             try {
                 //주어진 기간동안 sleep
                 Thread.sleep(500);
-            }catch(InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
